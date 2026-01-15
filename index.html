@@ -99,7 +99,7 @@ async function send() {
   text.value = "";
   addMsg(msg, "user");
 
-  const res = await fetch(API, {
+  const res = await fetch(API_URL, {
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({message: msg})
@@ -112,4 +112,5 @@ async function send() {
 
 </body>
 </html>
+
 
