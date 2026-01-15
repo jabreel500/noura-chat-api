@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>مساعد متجر نورا</title>
+<style>
+body {
+  background:#f5f7fa;
+  font-family: Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.chat {
+  width:420px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
+}
+.header {
+  background:#2ecc71;
+  color:#fff;
+  padding:12px;
+  text-align:center;
+  font-weight:bold;
+}
+.messages {
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+}
+.msg {
+  margin:8px 0;
+}
+.user { text-align:right; }
+.bot { text-align:left; }
+.bubble {
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:10px;
+  max-width:80%;
+}
+.user .bubble {
+  background:#2ecc71;
+  color:white;
+}
+.bot .bubble {
+  background:#ecf0f1;
+}
+.input {
+  display:flex;
+  border-top:1px solid #ddd;
+}
+input {
+  flex:1;
+  padding:10px;
+  border:none;
+  outline:none;
+}
+button {
+  background:#2ecc71;
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="chat">
+  <div class="header">🤖 مساعد متجر نورا</div>
+  <div id="messages" class="messages"></div>
+  <div class="input">
+    <input id="text" placeholder="اكتب سؤالك هنا...">
+    <button onclick="send()">إرسال</button>
+  </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000/chat";
+const messages = document.getElementById("messages");
+const text = document.getElementById("text");
+
+function addMsg(content, who) {
+  const div = document.createElement("div");
+  div.className = "msg " + who;
+  div.innerHTML = `<div class="bubble">${content}</div>`;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function send() {
+  const msg = text.value.trim();
+  if (!msg) return;
+  text.value = "";
+  addMsg(msg, "user");
+
+  const res = await fetch(API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({message: msg})
+  });
+
+  const data = await res.json();
+  addMsg(data.answer, "bot");
+}
+</script>
+
+</body>
+</html>
