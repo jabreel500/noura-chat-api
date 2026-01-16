@@ -36,7 +36,7 @@ def rule_based_reply(message: str):
 
 INTENTS = {
     "shipping_time": {
-        "keywords": ["شحن", "ينشحن", "يطلع الشحن", "التوصيل", "متى"],
+        "keywords": ["شحن", "ينشحن", "يطلع الشحن", "متى"],
         "answer": "يتم شحن الطلب خلال 24 إلى 48 ساعة عمل."
     },
     "shipping_delay": {
@@ -176,4 +176,5 @@ def chat(req: ChatRequest):
         "answer": response.choices[0].message.content,
         "source": "llm"
     }
+
 
