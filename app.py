@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 from fastapi.middleware.cors import CORSMiddleware
 
-CUSTOMER_SERVICE = "📞 +967 784784118 / +967 775436959"
+CUSTOMER_SERVICE = "📞 +967 784784118 \n +967 775436959 \n +967 777335742"
 '''
 RULE_BASED_ANSWERS = {
     
@@ -191,7 +191,7 @@ INTENTS = {
     # ═══════════════════════════════════════════════
     "contact": {
         "keywords": ["خدمة العملاء", "اكلم", "اتواصل", "رقم الدعم", "تواصل معكم", "رقم"],
-        "answer": f"📞 تواصل مع TechZone تيك زون:\n{CUSTOMER_SERVICE}\n💬 واتساب: +967 784784118\n📧 support@techzone.ye\n⏰ يوميًا من 9 صباحًا إلى 9 مساءً"
+        "answer": f"📞 تواصل مع TechZone تيك زون:\n{CUSTOMER_SERVICE}\n💬 واتساب: +967 716963404\n📧  techzone@net.ye\njabreel160@gmail.com\n⏰ يوميًا من 9 صباحًا إلى 9 مساءً"
     },
     "complaint": {
         "keywords": ["شكوى", "اشتكي", "مستاء", "زعلان", "سيء", "خدمة سيئة", "عندي مشكلة"],
@@ -359,5 +359,6 @@ def chat(req: ChatRequest):
         "answer": response.choices[0].message.content,
         "source": "llm"
     }
+
 
 
