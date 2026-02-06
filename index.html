@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>TechZone تيك زون - المساعد الذكي</title>
   <meta name="description" content="مساعد TechZone الذكي - دعم فني وخدمة عملاء على مدار الساعة">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +39,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -137,7 +138,6 @@
       align-items: center;
       gap: 12px;
       margin-top: auto;
-      /* Push to bottom of content if needed */
     }
 
     .status-indicator {
@@ -181,14 +181,18 @@
       color: var(--text-secondary);
     }
 
-    /* Header (Mobile Only mostly, implies simple top bar for main) */
+    /* Header (Mobile Only mostly) */
     .mobile-header {
       display: none;
+      /* Hidden on Desktop */
       padding: 16px;
       background: var(--bg-surface);
       border-bottom: var(--border-light);
       align-items: center;
       gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     /* Messages List */
@@ -214,7 +218,7 @@
     /* Message Item */
     .msg-row {
       display: flex;
-      gap: 14px;
+      gap: 10px;
       max-width: 80%;
       opacity: 0;
       animation: fadeUp 0.3s forwards;
@@ -242,8 +246,8 @@
     }
 
     .msg-avatar {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -257,7 +261,7 @@
     }
 
     .msg-row.bot .msg-avatar svg {
-      width: 18px;
+      width: 16px;
       fill: var(--accent);
     }
 
@@ -266,12 +270,12 @@
     }
 
     .msg-row.user .msg-avatar svg {
-      width: 18px;
+      width: 16px;
       fill: #fff;
     }
 
     .msg-bubble {
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: 18px;
       font-size: 14px;
       line-height: 1.6;
@@ -291,12 +295,11 @@
       border-top-left-radius: 18px;
       border-top-right-radius: 4px;
       text-align: left;
-      /* Keep user text LTR friendly if mixed */
     }
 
     .msg-time {
       font-size: 10px;
-      margin-top: 6px;
+      margin-top: 4px;
       opacity: 0.6;
     }
 
@@ -330,8 +333,9 @@
 
     /* Input Area */
     .composer-area {
-      padding: 20px;
-      background: rgba(17, 24, 39, 0.8);
+      padding: 16px;
+      background: rgba(17, 24, 39, 0.95);
+      /* More solid for mobile contrast */
       backdrop-filter: blur(10px);
       border-top: var(--border-light);
       display: flex;
@@ -346,6 +350,8 @@
       overflow-x: auto;
       padding-bottom: 8px;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      /* Smooth scroll on iOS */
     }
 
     .chips-wrap::-webkit-scrollbar {
@@ -355,16 +361,19 @@
     .chip {
       background: rgba(255, 255, 255, 0.05);
       border: var(--border-light);
-      padding: 6px 14px;
+      padding: 8px 16px;
+      /* Larger hit area */
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-secondary);
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
 
-    .chip:hover {
+    .chip:hover,
+    .chip:active {
       background: rgba(99, 102, 241, 0.2);
       color: var(--primary-glow);
       border-color: rgba(99, 102, 241, 0.4);
@@ -373,18 +382,17 @@
     /* Input Box */
     .input-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       background: var(--bg-body);
       border: var(--border-light);
       border-radius: 16px;
-      padding: 6px 6px 6px 16px;
+      padding: 8px 8px 8px 16px;
       transition: 0.3s;
     }
 
     .input-row:focus-within {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
     }
 
     .input-field {
@@ -393,19 +401,21 @@
       border: none;
       color: #fff;
       font-family: inherit;
-      font-size: 14px;
+      font-size: 16px;
+      /* 16px prevents iOS zoom on focus */
       padding: 10px 0;
       outline: none;
     }
 
     .input-field::placeholder {
       color: #4b5563;
+      font-size: 14px;
     }
 
     .send-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       border: none;
       display: flex;
@@ -415,43 +425,46 @@
       transition: 0.2s;
     }
 
-    .send-btn:hover {
-      transform: scale(1.05);
-    }
-
     .send-btn:active {
       transform: scale(0.95);
     }
 
     .send-btn svg {
-      width: 20px;
+      width: 22px;
       fill: #fff;
       transform: rotate(180deg);
     }
-
-    /* RTL Arrow fix */
 
     .clear-btn {
       background: none;
       border: none;
       cursor: pointer;
       color: #6b7280;
-      padding: 8px;
-      transition: 0.2s;
+      padding: 10px;
     }
 
     .clear-btn:hover {
       color: #ef4444;
     }
 
-    /* Responsive */
+    /* RESPONSIVE & MOBILE OPTIMIZATIONS */
     @media (max-width: 768px) {
+      body {
+        /* Enable scroll on body if needed specifically, but mostly hidden */
+        position: fixed;
+        /* Prevent body scroll bounce on iOS */
+        width: 100%;
+        height: 100%;
+      }
+
       .chat-layout {
         width: 100%;
-        height: 100vh;
+        height: 100dvh;
+        /* Dynamic viewport height */
         border-radius: 0;
         border: none;
         flex-direction: column;
+        background: var(--bg-body);
       }
 
       .sidebar {
@@ -462,12 +475,41 @@
         display: flex;
       }
 
-      .input-row {
-        border-radius: 12px;
+      .brand-title {
+        font-size: 18px;
+      }
+
+      .chat-main {
+        border-radius: 0;
+      }
+
+      .messages-container {
+        padding: 16px;
+        gap: 14px;
       }
 
       .msg-row {
-        max-width: 85%;
+        max-width: 88%;
+        gap: 8px;
+      }
+
+      .msg-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      .msg-bubble {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .composer-area {
+        padding: 12px 16px 20px;
+        /* More bottom padding for home bar */
+      }
+
+      .input-row {
+        padding: 6px 6px 6px 14px;
       }
     }
   </style>
@@ -502,11 +544,18 @@
     <!-- Mobile Header -->
     <div class="mobile-header">
       <div
-        style="width:40px;height:40px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">
-        TZ</div>
+        style="width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;flex-shrink:0;">
+        <svg viewBox="0 0 24 24" style="width:20px;fill:#fff">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+        </svg>
+      </div>
       <div>
-        <h3 style="font-size:16px;margin:0;font-weight:bold;">TechZone</h3>
-        <div style="font-size:12px;color:var(--text-secondary);">متصل الآن</div>
+        <h3 style="font-size:16px;margin:0;font-weight:bold;color:var(--text-main);">TechZone</h3>
+        <div style="font-size:12px;color:#10b981;display:flex;align-items:center;gap:4px;">
+          <span style="width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block;"></span> متصل
+          الآن
+        </div>
       </div>
     </div>
 
@@ -535,7 +584,7 @@
         <!-- Input -->
         <div class="input-row">
           <button class="clear-btn" id="clearBtn" title="مسح">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
             </svg>
           </button>
