@@ -11,28 +11,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Palette: Elegant Tech Dark Theme */
+      /* Palette: Elegant Tech Dark Theme (Default) */
       --primary: #4f46e5;
-      /* Smart Indigo */
-      --primary-glow: #6366f1;
+      --primary-hover: #4338ca;
+      --primary-glow: rgba(99, 102, 241, 0.5);
       --accent: #06b6d4;
-      /* Cyan for highlights */
+
       --bg-body: #0b0f19;
-      /* Deepest Dark */
       --bg-surface: #111827;
-      /* Panel Background */
+      --bg-surface-trans: rgba(17, 24, 39, 0.95);
       --bg-message-bot: #1f2937;
       --bg-message-user: #4f46e5;
 
       --text-main: #f3f4f6;
       --text-secondary: #9ca3af;
+      --text-inverse: #ffffff;
 
-      --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
       --border-light: 1px solid rgba(255, 255, 255, 0.08);
+      --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 
       --radius-xl: 24px;
       --radius-l: 16px;
       --font-main: 'Tajawal', sans-serif;
+    }
+
+    /* Light Theme Variables */
+    [data-theme="light"] {
+      --bg-body: #f0f4f8;
+      --bg-surface: #ffffff;
+      --bg-surface-trans: rgba(255, 255, 255, 0.95);
+      --bg-message-bot: #f1f5f9;
+      --bg-message-user: #4f46e5;
+
+      --text-main: #1e293b;
+      --text-secondary: #64748b;
+      --text-inverse: #ffffff;
+
+      --border-light: 1px solid rgba(0, 0, 0, 0.06);
+      --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -51,6 +67,7 @@
       align-items: center;
       min-height: 100vh;
       overflow: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
       background-image:
         radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.08), transparent 25%),
         radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.08), transparent 25%);
@@ -68,16 +85,18 @@
       border: var(--border-light);
       overflow: hidden;
       position: relative;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     /* Side Panel / Header for Mobile */
     .sidebar {
       width: 280px;
-      background: rgba(17, 24, 39, 0.95);
+      background: var(--bg-surface-trans);
       border-left: var(--border-light);
       display: flex;
       flex-direction: column;
       padding: 24px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     /* Chat Area */
@@ -86,7 +105,8 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      background: radial-gradient(circle at top, #1f2937 0%, #111827 40%);
+      /* Subtle gradient overlay for depth */
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 100%);
     }
 
     /* Brand Section */
@@ -104,7 +124,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 30px rgba(79, 70, 229, 0.3);
+      box-shadow: 0 0 30px var(--primary-glow);
       position: relative;
     }
 
@@ -117,7 +137,7 @@
     .brand-title {
       font-size: 22px;
       font-weight: 800;
-      color: #fff;
+      color: var(--text-main);
       margin-bottom: 4px;
       letter-spacing: -0.5px;
     }
@@ -130,7 +150,7 @@
 
     /* Online Status in Sidebar */
     .status-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(125, 125, 125, 0.05);
       border: var(--border-light);
       border-radius: var(--radius-l);
       padding: 12px 16px;
@@ -172,7 +192,7 @@
     .status-info h4 {
       font-size: 14px;
       margin: 0;
-      color: #fff;
+      color: var(--text-main);
     }
 
     .status-info p {
@@ -189,10 +209,43 @@
       background: var(--bg-surface);
       border-bottom: var(--border-light);
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      /* Adjusted for theme btn */
       position: sticky;
       top: 0;
       z-index: 10;
+      transition: background-color 0.3s ease;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      background: rgba(125, 125, 125, 0.1);
+      border: var(--border-light);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(125, 125, 125, 0.2);
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
     }
 
     /* Messages List */
@@ -211,7 +264,7 @@
     }
 
     .messages-container::-webkit-scrollbar-thumb {
-      background: #374151;
+      background: rgba(125, 125, 125, 0.2);
       border-radius: 10px;
     }
 
@@ -256,7 +309,7 @@
     }
 
     .msg-row.bot .msg-avatar {
-      background: linear-gradient(135deg, var(--bg-surface), #374151);
+      background: var(--bg-surface);
       border: var(--border-light);
     }
 
@@ -266,7 +319,7 @@
     }
 
     .msg-row.user .msg-avatar {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
     }
 
     .msg-row.user .msg-avatar svg {
@@ -280,6 +333,7 @@
       font-size: 14px;
       line-height: 1.6;
       position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .msg-row.bot .msg-bubble {
@@ -287,11 +341,12 @@
       color: var(--text-main);
       border-top-right-radius: 18px;
       border-top-left-radius: 4px;
+      border: var(--border-light);
     }
 
     .msg-row.user .msg-bubble {
       background: var(--bg-message-user);
-      color: #fff;
+      color: var(--text-inverse);
       border-top-left-radius: 18px;
       border-top-right-radius: 4px;
       text-align: left;
@@ -301,6 +356,7 @@
       font-size: 10px;
       margin-top: 4px;
       opacity: 0.6;
+      color: var(--text-secondary);
     }
 
     .msg-row.user .msg-time {
@@ -334,13 +390,13 @@
     /* Input Area */
     .composer-area {
       padding: 16px;
-      background: rgba(17, 24, 39, 0.95);
-      /* More solid for mobile contrast */
+      background: var(--bg-surface-trans);
       backdrop-filter: blur(10px);
       border-top: var(--border-light);
       display: flex;
       flex-direction: column;
       gap: 12px;
+      transition: background-color 0.3s ease;
     }
 
     /* Quick Actions (Chips) */
@@ -351,7 +407,6 @@
       padding-bottom: 8px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
-      /* Smooth scroll on iOS */
     }
 
     .chips-wrap::-webkit-scrollbar {
@@ -359,10 +414,9 @@
     }
 
     .chip {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(125, 125, 125, 0.1);
       border: var(--border-light);
       padding: 8px 16px;
-      /* Larger hit area */
       border-radius: 20px;
       font-size: 13px;
       color: var(--text-secondary);
@@ -374,9 +428,16 @@
 
     .chip:hover,
     .chip:active {
-      background: rgba(99, 102, 241, 0.2);
-      color: var(--primary-glow);
-      border-color: rgba(99, 102, 241, 0.4);
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Adjust text color on hover/active for better contrast depends on theme, 
+       but standard primary color usually works. */
+    [data-theme="light"] .chip:hover {
+      color: #fff;
+      background: var(--primary);
     }
 
     /* Input Box */
@@ -399,30 +460,35 @@
       flex: 1;
       background: transparent;
       border: none;
-      color: #fff;
+      color: var(--text-main);
       font-family: inherit;
       font-size: 16px;
-      /* 16px prevents iOS zoom on focus */
       padding: 10px 0;
       outline: none;
     }
 
     .input-field::placeholder {
-      color: #4b5563;
+      color: var(--text-secondary);
       font-size: 14px;
+    }
+
+    /* Add icon color adjustment for input accessories */
+    .input-accessories {
+      color: var(--text-secondary);
     }
 
     .send-btn {
       width: 44px;
       height: 44px;
       border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: 0.2s;
+      color: #ffffff;
     }
 
     .send-btn:active {
@@ -431,7 +497,7 @@
 
     .send-btn svg {
       width: 22px;
-      fill: #fff;
+      fill: currentColor;
       transform: rotate(180deg);
     }
 
@@ -439,7 +505,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      color: #6b7280;
+      color: var(--text-secondary);
       padding: 10px;
     }
 
@@ -450,9 +516,7 @@
     /* RESPONSIVE & MOBILE OPTIMIZATIONS */
     @media (max-width: 768px) {
       body {
-        /* Enable scroll on body if needed specifically, but mostly hidden */
         position: fixed;
-        /* Prevent body scroll bounce on iOS */
         width: 100%;
         height: 100%;
       }
@@ -460,7 +524,6 @@
       .chat-layout {
         width: 100%;
         height: 100dvh;
-        /* Dynamic viewport height */
         border-radius: 0;
         border: none;
         flex-direction: column;
@@ -505,7 +568,6 @@
 
       .composer-area {
         padding: 12px 16px 20px;
-        /* More bottom padding for home bar */
       }
 
       .input-row {
@@ -521,6 +583,16 @@
 
     <!-- Sidebar (Desktop) -->
     <div class="sidebar">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+        <button class="theme-toggle" id="themeBtnDesktop" title="تبديل المظهر">
+          <!-- Moon Icon (Default) / Sun Icon will be toggled via JS -->
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+          </svg>
+        </button>
+      </div>
+
       <div class="brand-section">
         <div class="brand-logo-wrap">
           <svg viewBox="0 0 24 24">
@@ -543,27 +615,36 @@
 
     <!-- Mobile Header -->
     <div class="mobile-header">
-      <div
-        style="width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;flex-shrink:0;">
-        <svg viewBox="0 0 24 24" style="width:20px;fill:#fff">
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-        </svg>
-      </div>
-      <div>
-        <h3 style="font-size:16px;margin:0;font-weight:bold;color:var(--text-main);">TechZone</h3>
-        <div style="font-size:12px;color:#10b981;display:flex;align-items:center;gap:4px;">
-          <span style="width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block;"></span> متصل
-          الآن
+      <div class="header-branding">
+        <div
+          style="width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" style="width:20px;fill:#fff">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-size:16px;margin:0;font-weight:bold;color:var(--text-main);">TechZone</h3>
+          <div style="font-size:12px;color:#10b981;display:flex;align-items:center;gap:4px;">
+            <span style="width:6px;height:6px;background:#10b981;border-radius:50%;display:inline-block;"></span> متصل
+          </div>
         </div>
       </div>
+
+      <!-- Mobile Theme Toggle -->
+      <button class="theme-toggle" id="themeBtnMobile">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z" />
+        </svg>
+      </button>
     </div>
 
     <!-- Main Chat -->
     <div class="chat-main">
       <div class="messages-container" id="messagesContainer">
         <!-- Dynamic Messages -->
-        <div style="text-align:center; opacity:0.3; margin:20px 0; font-size:12px;">
+        <div style="text-align:center; opacity:0.3; margin:20px 0; font-size:12px; color: var(--text-secondary);">
           بداية المحادثة • <span id="dateSpan"></span>
         </div>
       </div>
@@ -617,6 +698,33 @@
     // Icons
     const USER_ICON = `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
     const BOT_ICON = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>`;
+
+    // Theme Toggle Logic
+    const ICON_MOON = `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`;
+    const ICON_SUN = `<svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>`;
+
+    const themeBtns = [document.getElementById('themeBtnDesktop'), document.getElementById('themeBtnMobile')];
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.getItem('theme', theme);
+
+      // Update Icons
+      themeBtns.forEach(btn => {
+        btn.innerHTML = theme === 'light' ? ICON_MOON : ICON_SUN;
+      });
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    }
+
+    // Init Theme
+    setTheme('dark'); // Default to dark for now
+
+    themeBtns.forEach(btn => btn.onclick = toggleTheme);
 
     function escapeHtml(text) {
       return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -701,7 +809,7 @@
     input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
 
     clearBtn.onclick = () => {
-      container.innerHTML = `<div style="text-align:center; opacity:0.3; margin:20px 0; font-size:12px;">محادثة جديدة • ${new Date().toLocaleDateString('ar-SA')}</div>`;
+      container.innerHTML = `<div style="text-align:center; opacity:0.3; margin:20px 0; font-size:12px; color: var(--text-secondary);">محادثة جديدة • ${new Date().toLocaleDateString('ar-SA')}</div>`;
       appendMessage("مرحبًا بك مرة أخرى! 😊", "bot");
     };
 
